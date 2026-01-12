@@ -51,7 +51,7 @@ interface Branch {
 }
 
 function Pos() {
-	const { user } = useAuth();
+	const { user: _user } = useAuth();
 	const queryClient = useQueryClient();
 
 	const [selectedBranch, setSelectedBranch] = useState<number | null>(null);

@@ -52,7 +52,7 @@ interface Branch {
 }
 
 function CashierScreen() {
-	const { user } = useAuth();
+	const { user: _user } = useAuth();
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 

@@ -145,7 +145,7 @@ function Layout() {
                     </>
                   )}
                 </Link>
-                {sidebarOpen && hasSubmenu && isMenuExpanded && (
+                {sidebarOpen && hasSubmenu && isMenuExpanded && item.submenu && (
                   <div className="ml-4 mt-1 space-y-1">
                     {item.submenu.map((subItem) => {
                       const isSubActive = location.pathname === subItem.path;

@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 import KitchenDashboard from './pages/KitchenDashboard';

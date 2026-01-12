@@ -209,7 +209,6 @@ function Locations() {
             <div className="space-y-2 max-h-96 overflow-y-auto">
               {governorates?.map((gov: any) => {
                 const govName = typeof gov === 'string' ? gov : gov.name;
-                const govId = typeof gov === 'string' ? null : gov.id;
                 const isManaged = typeof gov === 'string' ? false : gov.is_managed;
                 return (
                   <div
@@ -276,7 +275,6 @@ function Locations() {
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {cities?.map((city: any) => {
                   const cityName = typeof city === 'string' ? city : city.name;
-                  const cityId = typeof city === 'string' ? null : city.id;
                   const isManaged = typeof city === 'string' ? false : city.is_managed;
                   return (
                     <div
@@ -354,7 +352,6 @@ function Locations() {
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {areas?.map((area: any) => {
                   const areaName = typeof area === 'string' ? area : area.name;
-                  const areaId = typeof area === 'string' ? null : area.id;
                   const isManaged = typeof area === 'string' ? false : area.is_managed;
                   return (
                     <div

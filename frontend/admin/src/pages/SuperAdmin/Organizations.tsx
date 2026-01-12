@@ -246,7 +246,7 @@ function Organizations() {
               setShowModal(false);
               setEditingOrg(null);
             }}
-            onSave={(data) => {
+            onSave={(data: any) => {
               if (editingOrg) {
                 updateMutation.mutate({ id: editingOrg.id, data });
               } else {

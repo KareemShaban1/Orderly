@@ -54,7 +54,7 @@ function KitchenDashboard({ echo }: KitchenDashboardProps) {
       fetchOrders();
     });
 
-    echo.channel(channelName).listen('.order.status.updated', (data: any) => {
+    echo.channel(channelName).listen('.order.status.updated', (_data: any) => {
       fetchOrders();
     });
 
