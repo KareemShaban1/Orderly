@@ -1,0 +1,73 @@
+.settings-page {
+  max-width: 800px;
+}
+
+.settings-form {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.settings-section {
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.settings-section:last-child {
+  border-bottom: none;
+}
+
+.settings-section h2 {
+  margin: 0 0 20px 0;
+  color: #2c3e50;
+  font-size: 20px;
+}
+
+.settings-form .form-group {
+  margin-bottom: 20px;
+}
+
+.settings-form .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: 500;
+}
+
+.settings-form .form-group input[type="text"],
+.settings-form .form-group input[type="number"],
+.settings-form .form-group select,
+.settings-form .form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.settings-form .form-group input[type="color"] {
+  width: 100px;
+  height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.settings-form .form-group input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.settings-form .form-group label input[type="checkbox"] {
+  display: inline;
+  width: auto;
+}
+
+.settings-form .form-actions {
+  margin-top: 30px;
+  text-align: right;
+}
+
+
+

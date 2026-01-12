@@ -1,0 +1,63 @@
+/* App-specific styles that work with Tailwind */
+.app {
+  min-height: 100vh;
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  direction: rtl;
+}
+
+[dir="ltr"] {
+  direction: ltr;
+}
+
+/* Loading Spinner - Keep for other pages */
+.loading {
+  @apply flex justify-center items-center min-h-screen;
+}
+
+.spinner {
+  @apply border-4 border-gray-200 border-t-primary-500 rounded-full w-10 h-10 animate-spin;
+}
+
+/* Additional button variants */
+.btn-success {
+  @apply bg-green-500 text-white hover:bg-green-600;
+}
+
+/* Container utility */
+.container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Animations */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+

@@ -1,0 +1,33 @@
+{
+  "name": "qr-order-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "QR Order System - All Frontend Applications",
+  "scripts": {
+    "dev:guest": "cd guest && npm run dev",
+    "dev:admin": "cd admin && npm run dev",
+    "dev:kitchen": "cd kitchen && npm run dev",
+    "dev:landing": "cd landing && npm run dev",
+    "dev:all": "concurrently \"npm run dev:guest\" \"npm run dev:admin\" \"npm run dev:kitchen\" \"npm run dev:landing\"",
+    "build:guest": "cd guest && npm run build",
+    "build:admin": "cd admin && npm run build",
+    "build:kitchen": "cd kitchen && npm run build",
+    "build:landing": "cd landing && npm run build",
+    "build:all": "npm run build:guest && npm run build:admin && npm run build:kitchen && npm run build:landing",
+    "install:all": "cd guest && npm install && cd ../admin && npm install && cd ../kitchen && npm install && cd ../landing && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
