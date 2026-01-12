@@ -5,16 +5,16 @@ interface MenuItem {
   id: number;
   name: string;
   name_ar: string | null;
-  description?: string | null;
-  description_ar?: string | null;
-  image?: string | null;
+  description: string | null;
+  description_ar: string | null;
+  image: string | null;
   price: number;
   has_sizes: boolean;
   sizes: Array<{ name: string; price: number }> | null;
   has_addons: boolean;
   addons: Array<{ id: number; name: string; name_ar: string | null; price: number }>;
-  preparation_type?: string;
-  estimated_preparation_time?: number | null;
+  preparation_type: string;
+  estimated_preparation_time: number | null;
 }
 
 interface ItemCustomizationModalProps {
