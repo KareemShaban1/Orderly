@@ -56,6 +56,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Frontend Guest App URL
+    |--------------------------------------------------------------------------
+    |
+    | This URL is used for generating QR codes and redirecting customers
+    | to the guest ordering application.
+    |
+    */
+
+    'frontend_url' => env('FRONTEND_GUEST_URL', env('APP_URL', 'http://localhost')),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |
