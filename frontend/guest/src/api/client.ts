@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 // Ensure API URL always ends with /api if not already present
-const envUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Default to production API URL if not set
+const envUrl = import.meta.env.VITE_API_URL || (typeof window !== 'undefined' 
+  ? `${window.location.protocol}//${window.location.host}` 
+  : 'http://orderly.kareemsoft.org');
 const API_BASE_URL = envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
 
 const apiClient = axios.create({
