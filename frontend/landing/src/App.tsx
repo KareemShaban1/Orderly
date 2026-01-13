@@ -6,9 +6,20 @@ import LoginOrganization from './pages/LoginOrganization';
 import RegisterOrganization from './pages/RegisterOrganization';
 
 function App() {
+  // Determine basename based on current path
+  // If accessing /organizations/ directly, use empty basename
+  // Otherwise use /landing
+  const getBasename = () => {
+    if (typeof window !== 'undefined') {
+      const pathname = window.location.pathname;
+      return pathname.startsWith('/organizations/') ? '' : '/landing';
+    }
+    return '/landing'; // Default for SSR
+  };
+  
   return (
     <AuthProvider>
-      <BrowserRouter basename="/landing">
+      <BrowserRouter basename={getBasename()}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/organizations/:slug" element={<OrganizationPage />} />
