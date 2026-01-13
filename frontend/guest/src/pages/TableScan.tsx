@@ -91,7 +91,7 @@ function TableScan() {
       const codeReader = new BrowserMultiFormatReader();
       codeReaderRef.current = codeReader;
 
-      let selectedDeviceId: string | undefined;
+      let selectedDeviceId: string | null = null;
       
       try {
         // Try to list devices
@@ -107,7 +107,7 @@ function TableScan() {
       } catch (listError: any) {
         // If listVideoInputDevices fails, try without specifying device (use default)
         console.warn('Could not enumerate devices, using default camera:', listError);
-        selectedDeviceId = undefined; // undefined means use default camera
+        selectedDeviceId = null; // null means use default camera
       }
 
       // Request camera permission first
