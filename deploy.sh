@@ -122,3 +122,5 @@ echo "  3. Set up SSL certificates with certbot"
 echo "  4. Configure DNS records"
 echo "  5. Test all applications"
 
+
+

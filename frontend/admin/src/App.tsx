@@ -77,7 +77,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
         <AuthProvider>
-          <Router>
+          <Router basename="/admin">
             <AppRoutes />
           </Router>
         </AuthProvider>

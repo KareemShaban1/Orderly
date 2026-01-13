@@ -174,6 +174,19 @@ cd ../landing && npm run build
    - Visit `http://orderly.kareemsoft.org/admin` (Admin Dashboard)
    - Visit `http://orderly.kareemsoft.org/kitchen` (Kitchen Panel)
 
+3. **Check if index.html exists:**
+   ```bash
+   ls -la /www/wwwroot/orderly.kareemsoft.org/frontend/admin/dist/index.html
+   ls -la /www/wwwroot/orderly.kareemsoft.org/frontend/kitchen/dist/index.html
+   ls -la /www/wwwroot/orderly.kareemsoft.org/frontend/guest/dist/index.html
+   ```
+
+4. **Test direct file access:**
+   ```bash
+   curl http://orderly.kareemsoft.org/admin/index.html | head -20
+   curl http://orderly.kareemsoft.org/kitchen/index.html | head -20
+   ```
+
 ## 🐛 Troubleshooting
 
 ### 404 Errors on Frontend Apps
