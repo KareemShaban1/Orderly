@@ -1,12 +1,8 @@
 const CACHE_NAME = 'qr-order-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/src/main.tsx',
-  '/src/App.tsx',
-  '/src/pages/HomePage.tsx',
-  '/src/pages/OrganizationPage.tsx',
-  '/manifest.json'
+  '/landing/',
+  '/landing/index.html',
+  '/landing/manifest.json'
 ];
 
 // Install event - cache resources
@@ -72,7 +68,7 @@ self.addEventListener('fetch', (event) => {
         }).catch(() => {
           // If fetch fails, return offline page or cached response
           if (event.request.destination === 'document') {
-            return caches.match('/index.html');
+            return caches.match('/landing/index.html');
           }
         });
       })
