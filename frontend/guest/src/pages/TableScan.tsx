@@ -94,7 +94,7 @@ function TableScan() {
       let selectedDeviceId: string | null = null;
       
       try {
-        // Try to list devices
+        // Try to list devices - prefer back camera (environment)
         const videoInputDevices = await codeReader.listVideoInputDevices();
         
         if (videoInputDevices.length === 0) {
@@ -103,16 +103,32 @@ function TableScan() {
           return;
         }
 
-        selectedDeviceId = videoInputDevices[0].deviceId;
+        // Prefer back camera (environment facing)
+        const backCamera = videoInputDevices.find(device => 
+          device.label.toLowerCase().includes('back') || 
+          device.label.toLowerCase().includes('rear') ||
+          device.label.toLowerCase().includes('environment')
+        );
+        
+        // If no back camera found, prefer camera with 'facing' in label, or use first one
+        selectedDeviceId = backCamera?.deviceId || 
+          videoInputDevices.find(device => device.label.toLowerCase().includes('facing'))?.deviceId ||
+          videoInputDevices[0].deviceId;
       } catch (listError: any) {
         // If listVideoInputDevices fails, try without specifying device (use default)
         console.warn('Could not enumerate devices, using default camera:', listError);
         selectedDeviceId = null; // null means use default camera
       }
 
-      // Request camera permission first
+      // Request camera permission first - prefer back camera
       try {
-        await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        await navigator.mediaDevices.getUserMedia({ 
+          video: { 
+            facingMode: 'environment', // Prefer back camera
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          } 
+        });
       } catch (permissionError: any) {
         if (permissionError.name === 'NotAllowedError' || permissionError.name === 'PermissionDeniedError') {
           setError('Camera permission denied. Please allow camera access in your browser settings and try again.');
@@ -125,6 +141,31 @@ function TableScan() {
         return;
       }
 
+      // Helper function to extract table code from QR text
+      const extractTableCode = (text: string): string => {
+        // If it's a full URL, extract the code from it
+        // Format: http://orderly.kareemsoft.org/order/TBL-XXXXXXXX
+        // or: https://orderly.kareemsoft.org/order/TBL-XXXXXXXX
+        const urlMatch = text.match(/\/order\/([^\/\s]+)$/);
+        if (urlMatch) {
+          return urlMatch[1];
+        }
+        
+        // If it's just the code (TBL-XXXXXXXX), return as is
+        if (text.match(/^TBL-[A-Z0-9]+$/i)) {
+          return text;
+        }
+        
+        // If it contains the code somewhere, try to extract it
+        const codeMatch = text.match(/(TBL-[A-Z0-9]+)/i);
+        if (codeMatch) {
+          return codeMatch[1];
+        }
+        
+        // Return as is if no pattern matches
+        return text;
+      };
+
       // Start decoding
       codeReader.decodeFromVideoDevice(
         selectedDeviceId,
@@ -132,9 +173,10 @@ function TableScan() {
         (result, error) => {
           if (result) {
             const text = result.getText();
+            const tableCode = extractTableCode(text);
             codeReader.reset();
             setScanning(false);
-            navigate(`/order/${text}`);
+            navigate(`/order/${tableCode}`);
           }
           if (error) {
             if (error.name !== 'NotFoundException') {
