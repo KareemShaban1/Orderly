@@ -8,7 +8,7 @@ import RegisterOrganization from './pages/RegisterOrganization';
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/landing">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/organizations/:slug" element={<OrganizationPage />} />

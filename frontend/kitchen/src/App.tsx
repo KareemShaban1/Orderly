@@ -56,7 +56,7 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <Router basename="/kitchen">
         <AppRoutes />
       </Router>
     </AuthProvider>
