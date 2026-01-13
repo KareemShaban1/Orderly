@@ -73,19 +73,59 @@ function TableScan() {
       setScanning(true);
       setError(null);
       
-      const codeReader = new BrowserMultiFormatReader();
-      codeReaderRef.current = codeReader;
-
-      const videoInputDevices = await codeReader.listVideoInputDevices();
-      
-      if (videoInputDevices.length === 0) {
-        setError('No camera found. Please use a device with a camera.');
+      // Check if camera access is available
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        setError('Camera access is not available in this browser. Please use a modern browser with camera support.');
         setScanning(false);
         return;
       }
 
-      const selectedDeviceId = videoInputDevices[0].deviceId;
+      // Check if HTTPS is required (camera access requires HTTPS except localhost)
+      const isSecureContext = window.isSecureContext || location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+      if (!isSecureContext) {
+        setError('Camera access requires HTTPS. Please access this site via HTTPS (https://orderly.kareemsoft.org) or use the manual table code entry below.');
+        setScanning(false);
+        return;
+      }
 
+      const codeReader = new BrowserMultiFormatReader();
+      codeReaderRef.current = codeReader;
+
+      let selectedDeviceId: string | undefined;
+      
+      try {
+        // Try to list devices
+        const videoInputDevices = await codeReader.listVideoInputDevices();
+        
+        if (videoInputDevices.length === 0) {
+          setError('No camera found. Please use a device with a camera or enter the table code manually.');
+          setScanning(false);
+          return;
+        }
+
+        selectedDeviceId = videoInputDevices[0].deviceId;
+      } catch (listError: any) {
+        // If listVideoInputDevices fails, try without specifying device (use default)
+        console.warn('Could not enumerate devices, using default camera:', listError);
+        selectedDeviceId = undefined; // undefined means use default camera
+      }
+
+      // Request camera permission first
+      try {
+        await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+      } catch (permissionError: any) {
+        if (permissionError.name === 'NotAllowedError' || permissionError.name === 'PermissionDeniedError') {
+          setError('Camera permission denied. Please allow camera access in your browser settings and try again.');
+        } else if (permissionError.name === 'NotFoundError' || permissionError.name === 'DevicesNotFoundError') {
+          setError('No camera found. Please use a device with a camera or enter the table code manually.');
+        } else {
+          setError('Failed to access camera: ' + (permissionError.message || 'Unknown error'));
+        }
+        setScanning(false);
+        return;
+      }
+
+      // Start decoding
       codeReader.decodeFromVideoDevice(
         selectedDeviceId,
         videoRef.current!,
@@ -105,7 +145,7 @@ function TableScan() {
       );
     } catch (err: any) {
       console.error('Error starting scanner:', err);
-      setError(err.message || 'Failed to start camera. Please check permissions.');
+      setError(err.message || 'Failed to start camera. Please check permissions or use the manual table code entry below.');
       setScanning(false);
     }
   };
