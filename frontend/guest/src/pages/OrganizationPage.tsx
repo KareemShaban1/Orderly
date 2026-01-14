@@ -157,8 +157,8 @@ function OrganizationPage() {
         }
       }
 
-      // Start decoding - use device ID or undefined for default
-      const deviceToUse = selectedDeviceId === 'default' ? undefined : selectedDeviceId;
+      // Start decoding - use device ID or null for default
+      const deviceToUse = selectedDeviceId === 'default' ? null : (selectedDeviceId || null);
       
       codeReader.decodeFromVideoDevice(
         deviceToUse,
