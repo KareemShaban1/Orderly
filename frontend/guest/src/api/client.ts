@@ -1,10 +1,23 @@
 import axios from 'axios';
 
 // Ensure API URL always ends with /api if not already present
-// Default to production API URL if not set
-const envUrl = import.meta.env.VITE_API_URL || (typeof window !== 'undefined' 
-  ? `${window.location.protocol}//${window.location.host}` 
-  : 'http://orderly.kareemsoft.org');
+// Use HTTPS when page is loaded over HTTPS to avoid mixed content errors
+const getApiUrl = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  
+  if (typeof window !== 'undefined') {
+    // Use HTTPS if page is HTTPS, otherwise use HTTP (for local dev)
+    const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+    return `${protocol}//${window.location.host}`;
+  }
+  
+  // Default fallback - use HTTPS for production
+  return 'https://orderly.kareemsoft.org';
+};
+
+const envUrl = getApiUrl();
 const API_BASE_URL = envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
 
 const apiClient = axios.create({
