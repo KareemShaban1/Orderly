@@ -18,7 +18,13 @@ const getApiUrl = () => {
 };
 
 const envUrl = getApiUrl();
-const API_BASE_URL = envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
+// Ensure we always use HTTPS in production, and handle /api suffix correctly
+let API_BASE_URL = envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
+
+// Force HTTPS if we're on HTTPS page (prevent mixed content)
+if (typeof window !== 'undefined' && window.location.protocol === 'https:') {
+  API_BASE_URL = API_BASE_URL.replace(/^http:/, 'https:');
+}
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
