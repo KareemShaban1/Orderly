@@ -47,7 +47,7 @@ export default function OrganizationPage() {
       const response = await apiClient.get(`/organizations/${slug}`);
       const data = response.data.data as Organization;
       // Debug: Log to help diagnose
-      if (process.env.NODE_ENV === 'development') {
+      if (import.meta.env.DEV) {
         console.log('Organization data:', data);
         console.log('Branches:', data.branches);
         data.branches.forEach((branch, idx) => {
