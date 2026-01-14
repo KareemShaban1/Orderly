@@ -77,6 +77,7 @@ class TableController extends Controller
                 'tenant' => [
                     'id' => $table->branch->tenant->id,
                     'name' => $table->branch->tenant->name,
+                    'slug' => $table->branch->tenant->slug,
                     'logo' => $table->branch->tenant->logo,
                 ],
             ],

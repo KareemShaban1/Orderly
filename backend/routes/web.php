@@ -7,5 +7,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Organization landing pages
-Route::get('/organizations/{slug}', [OrganizationController::class, 'show']);
+// Organization landing pages - Changed to /restaurant/ to avoid conflict with frontend
+Route::get('/restaurant/{slug}', [OrganizationController::class, 'show']);

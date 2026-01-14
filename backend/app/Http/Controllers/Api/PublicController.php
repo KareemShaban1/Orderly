@@ -95,7 +95,10 @@ class PublicController extends Controller
         $tenant = Tenant::where('slug', $slug)
             ->where('is_active', true)
             ->with(['branches' => function ($query) {
-                $query->where('is_active', true);
+                $query->where('is_active', true)
+                    ->with(['tables' => function ($query) {
+                        $query->where('is_active', true);
+                    }]);
             }])
             ->first();
 
@@ -111,17 +114,19 @@ class PublicController extends Controller
             return $branch->tenant_id === $tenant->id;
         });
 
+        $frontendUrl = config('app.frontend_url', env('APP_URL', 'http://localhost'));
+
         return response()->json([
             'success' => true,
             'data' => [
                 'id' => $tenant->id,
                 'name' => $tenant->name,
                 'slug' => $tenant->slug,
-                'link' => url("/organizations/{$tenant->slug}"),
+                'link' => "{$frontendUrl}/organizations/{$tenant->slug}",
                 'logo' => $tenant->logo ? url('storage/' . $tenant->logo) : null,
                 'email' => $tenant->email,
                 'phone' => $tenant->phone,
-                'branches' => $branches->map(function ($branch) {
+                'branches' => $branches->map(function ($branch) use ($frontendUrl) {
                     return [
                         'id' => $branch->id,
                         'name' => $branch->name,
@@ -134,6 +139,16 @@ class PublicController extends Controller
                         'phone' => $branch->phone,
                         'opening_time' => $branch->opening_time,
                         'closing_time' => $branch->closing_time,
+                        'tables' => $branch->tables->map(function ($table) use ($frontendUrl) {
+                            return [
+                                'id' => $table->id,
+                                'table_number' => $table->table_number,
+                                'capacity' => $table->capacity,
+                                'qr_code' => $table->qr_code,
+                                'qr_code_image' => $table->qr_code_image ? url('storage/' . $table->qr_code_image) : null,
+                                'qr_url' => "{$frontendUrl}/order/{$table->qr_code}",
+                            ];
+                        })->values(),
                     ];
                 })->values(), // Reset array keys
             ],

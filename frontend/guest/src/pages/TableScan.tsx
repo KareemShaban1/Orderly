@@ -17,6 +17,7 @@ interface TableData {
   tenant: {
     id: number;
     name: string;
+    slug: string;
     logo: string | null;
   };
 }
@@ -63,7 +64,11 @@ function TableScan() {
   };
 
   const handleViewMenu = () => {
-    if (table) {
+    if (table && table.tenant.slug) {
+      // Navigate to organization page where customers can scan QR codes
+      window.location.href = `/organizations/${table.tenant.slug}`;
+    } else if (table) {
+      // Fallback: navigate to menu if slug not available
       navigate(`/menu/${table.id}`);
     }
   };

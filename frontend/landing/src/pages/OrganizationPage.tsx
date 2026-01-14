@@ -13,6 +13,15 @@ interface Organization {
   branches: Branch[];
 }
 
+interface Table {
+  id: number;
+  table_number: string;
+  capacity: number;
+  qr_code: string;
+  qr_code_image: string | null;
+  qr_url: string;
+}
+
 interface Branch {
   id: number;
   name: string;
@@ -25,6 +34,7 @@ interface Branch {
   phone: string;
   opening_time: string;
   closing_time: string;
+  tables: Table[];
 }
 
 export default function OrganizationPage() {
@@ -172,6 +182,42 @@ export default function OrganizationPage() {
                       </p>
                     )}
                   </div>
+                  
+                  {/* Tables with QR Codes */}
+                  {branch.tables && branch.tables.length > 0 && (
+                    <div className="mt-4 pt-4 border-t border-slate-200">
+                      <h4 className="text-sm sm:text-base font-semibold text-slate-900 mb-3">Tables & QR Codes</h4>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+                        {branch.tables.map((table) => (
+                          <div key={table.id} className="text-center">
+                            {table.qr_code_image ? (
+                              <a
+                                href={table.qr_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block"
+                              >
+                                <img
+                                  src={table.qr_code_image}
+                                  alt={`Table ${table.table_number} QR Code`}
+                                  className="w-full aspect-square object-contain rounded-lg border-2 border-slate-200 hover:border-slate-900 transition-colors mb-1"
+                                />
+                              </a>
+                            ) : (
+                              <div className="w-full aspect-square bg-slate-100 rounded-lg border-2 border-slate-200 flex items-center justify-center mb-1">
+                                <span className="text-xs text-slate-500">No QR</span>
+                              </div>
+                            )}
+                            <p className="text-xs text-slate-600 font-medium">Table {table.table_number}</p>
+                            <p className="text-xs text-slate-500">👥 {table.capacity}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-xs text-slate-500 mt-3 text-center">
+                        Scan any QR code to view menu and order
+                      </p>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -182,16 +228,21 @@ export default function OrganizationPage() {
         <div className="mt-8 sm:mt-12 bg-slate-900 rounded-xl shadow-lg p-6 sm:p-8 text-center text-white">
           <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Ready to Order?</h2>
           <p className="text-sm sm:text-base text-slate-300 mb-4 sm:mb-6 px-4">
-            Scan the QR code at your table to view our menu and place your order
+            Scan the QR code at your table to view our menu and place your order instantly
           </p>
-          <a
-            href={organization.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block px-5 py-2.5 sm:px-6 sm:py-3 bg-white text-slate-900 rounded-lg hover:bg-slate-100 transition-colors font-medium text-sm sm:text-base"
-          >
-            View Menu & Order
-          </a>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
+            <a
+              href="/"
+              className="inline-block px-5 py-2.5 sm:px-6 sm:py-3 bg-white text-slate-900 rounded-lg hover:bg-slate-100 transition-colors font-medium text-sm sm:text-base"
+            >
+              📱 Scan QR Code
+            </a>
+            {organization.branches.some(b => b.tables && b.tables.length > 0) && (
+              <p className="text-xs sm:text-sm text-slate-400">
+                Or scroll up to view and scan table QR codes
+              </p>
+            )}
+          </div>
         </div>
       </section>
 
