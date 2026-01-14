@@ -169,10 +169,9 @@ function TableScan() {
       };
 
       // Start decoding
-      codeReader.decodeFromVideoDevice(
-        selectedDeviceId,
-        videoRef.current!,
-        (result, error) => {
+      if (selectedDeviceId === 'default' && videoRef.current?.srcObject) {
+        // Stream already set, decode from video element
+        codeReader.decodeFromVideoElement(videoRef.current, (result, error) => {
           if (result) {
             const text = result.getText();
             const tableCode = extractTableCode(text);
@@ -180,13 +179,33 @@ function TableScan() {
             setScanning(false);
             navigate(`/order/${tableCode}`);
           }
-          if (error) {
-            if (error.name !== 'NotFoundException') {
-              console.error('Scan error:', error);
+          if (error && error.name !== 'NotFoundException') {
+            console.error('Scan error:', error);
+          }
+        });
+      } else if (selectedDeviceId) {
+        codeReader.decodeFromVideoDevice(
+          selectedDeviceId,
+          videoRef.current!,
+          (result, error) => {
+            if (result) {
+              const text = result.getText();
+              const tableCode = extractTableCode(text);
+              codeReader.reset();
+              setScanning(false);
+              navigate(`/order/${tableCode}`);
+            }
+            if (error) {
+              if (error.name !== 'NotFoundException') {
+                console.error('Scan error:', error);
+              }
             }
           }
-        }
-      );
+        );
+      } else {
+        setError('No camera found. Please use manual table code entry.');
+        setScanning(false);
+      }
     } catch (err: any) {
       console.error('Error starting scanner:', err);
       setError(err.message || 'Failed to start camera. Please check permissions or use the manual table code entry below.');

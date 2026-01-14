@@ -67,9 +67,30 @@ function Menu() {
     try {
       setLoading(true);
       const response = await apiClient.get(`/menu/${tableId}`);
-      setMenuData(response.data);
-      if (response.data.menu.length > 0) {
-        setSelectedCategory(response.data.menu[0].id);
+      const data = response.data;
+      
+      // Ensure all prices are numbers (convert strings to numbers)
+      if (data.menu && Array.isArray(data.menu)) {
+        data.menu = data.menu.map((category: Category) => ({
+          ...category,
+          items: category.items.map((item: MenuItem) => ({
+            ...item,
+            price: typeof item.price === 'string' ? parseFloat(item.price) : Number(item.price) || 0,
+            sizes: item.sizes?.map((size) => ({
+              ...size,
+              price: typeof size.price === 'string' ? parseFloat(size.price) : Number(size.price) || 0,
+            })),
+            addons: item.addons?.map((addon) => ({
+              ...addon,
+              price: typeof addon.price === 'string' ? parseFloat(addon.price) : Number(addon.price) || 0,
+            })),
+          })),
+        }));
+      }
+      
+      setMenuData(data);
+      if (data.menu.length > 0) {
+        setSelectedCategory(data.menu[0].id);
       }
     } catch (err: any) {
       console.error('Error fetching menu:', err);
@@ -222,7 +243,7 @@ function Menu() {
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0 mt-auto pt-3 sm:pt-4">
                     <div className="text-xl sm:text-2xl font-bold text-emerald-600 flex items-center gap-1">
                       <span className="text-sm sm:text-base">EGP</span>
-                      {item.price.toFixed(2)}
+                      {Number(item.price || 0).toFixed(2)}
                     </div>
                     <button
                       onClick={() => handleItemClick(item)}

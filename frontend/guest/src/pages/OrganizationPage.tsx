@@ -109,29 +109,59 @@ function OrganizationPage() {
       const codeReader = new BrowserMultiFormatReader();
       codeReaderRef.current = codeReader;
 
-      // Get available video devices
-      const videoInputDevices = await codeReader.listVideoInputDevices();
-      let selectedDeviceId = videoInputDevices[0]?.deviceId;
-
-      // Prefer back camera on mobile
-      const backCamera = videoInputDevices.find(
-        (device) =>
-          device.label.toLowerCase().includes('back') ||
-          device.label.toLowerCase().includes('rear') ||
-          device.label.toLowerCase().includes('environment')
-      );
-      if (backCamera) {
-        selectedDeviceId = backCamera.deviceId;
-      }
-
-      if (!selectedDeviceId) {
-        setError('No camera found. Please use manual table code entry.');
+      // Request camera permission first
+      try {
+        await navigator.mediaDevices.getUserMedia({ video: true });
+      } catch (permError: any) {
+        setError('Camera permission denied. Please allow camera access and try again.');
         setScanning(false);
         return;
       }
 
+      // Get available video devices after permission granted
+      let selectedDeviceId: string | undefined;
+      try {
+        const videoInputDevices = await codeReader.listVideoInputDevices();
+        selectedDeviceId = videoInputDevices[0]?.deviceId;
+
+        // Prefer back camera on mobile
+        const backCamera = videoInputDevices.find(
+          (device) =>
+            device.label.toLowerCase().includes('back') ||
+            device.label.toLowerCase().includes('rear') ||
+            device.label.toLowerCase().includes('environment')
+        );
+        if (backCamera) {
+          selectedDeviceId = backCamera.deviceId;
+        }
+      } catch (deviceError) {
+        // If listVideoInputDevices fails, try without specifying device (use default)
+        console.log('Could not list devices, using default camera');
+      }
+
+      // If no device selected, try with constraints instead
+      if (!selectedDeviceId && videoRef.current) {
+        // Try to get default camera with constraints
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              facingMode: { ideal: 'environment' } // Prefer back camera
+            }
+          });
+          videoRef.current.srcObject = stream;
+          selectedDeviceId = 'default'; // Use default
+        } catch (streamError) {
+          setError('Could not access camera. Please use manual table code entry.');
+          setScanning(false);
+          return;
+        }
+      }
+
+      // Start decoding - use device ID or undefined for default
+      const deviceToUse = selectedDeviceId === 'default' ? undefined : selectedDeviceId;
+      
       codeReader.decodeFromVideoDevice(
-        selectedDeviceId,
+        deviceToUse,
         videoRef.current!,
         (result, error) => {
           if (result) {
@@ -139,7 +169,6 @@ function OrganizationPage() {
             const tableCode = extractTableCode(text);
             codeReader.reset();
             setScanning(false);
-            // Navigate directly to menu with table code
             navigate(`/order/${tableCode}`);
           }
           if (error && error.name !== 'NotFoundException') {
