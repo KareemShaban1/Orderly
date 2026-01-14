@@ -64,11 +64,8 @@ function TableScan() {
   };
 
   const handleViewMenu = () => {
-    if (table && table.tenant.slug) {
-      // Navigate to organization page where customers can scan QR codes
-      window.location.href = `/organizations/${table.tenant.slug}`;
-    } else if (table) {
-      // Fallback: navigate to menu if slug not available
+    if (table) {
+      // Navigate directly to menu - simple flow
       navigate(`/menu/${table.id}`);
     }
   };

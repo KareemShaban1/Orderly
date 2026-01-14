@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import OrganizationsList from './pages/OrganizationsList';
+import OrganizationPage from './pages/OrganizationPage';
 import TableScan from './pages/TableScan';
 import Menu from './pages/Menu';
 import OrderStatus from './pages/OrderStatus';
@@ -11,8 +13,11 @@ function App() {
     <Router>
       <div className="app">
         <Routes>
-          {/* Main entry point - QR scanning or table selection */}
-          <Route path="/" element={<TableScan />} />
+				  {/* Simple flow: Organizations List → Organization Page → Scan/Order → Menu */}
+				  <Route path="/" element={<OrganizationsList />} />
+				  <Route path="/organizations" element={<OrganizationsList />} />
+				  <Route path="/organization/:slug" element={<OrganizationPage />} />
+				  {/* QR Code scanning and table confirmation */}
           <Route path="/scan" element={<TableScan />} />
           <Route path="/order/:qrCode" element={<TableScan />} />
           {/* Customer ordering flow */}
@@ -27,4 +32,3 @@ function App() {
 }
 
 export default App;
-

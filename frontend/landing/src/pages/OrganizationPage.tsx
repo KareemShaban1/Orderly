@@ -45,7 +45,16 @@ export default function OrganizationPage() {
     queryKey: ['organization', slug],
     queryFn: async () => {
       const response = await apiClient.get(`/organizations/${slug}`);
-      return response.data.data as Organization;
+      const data = response.data.data as Organization;
+      // Debug: Log to help diagnose
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Organization data:', data);
+        console.log('Branches:', data.branches);
+        data.branches.forEach((branch, idx) => {
+          console.log(`Branch ${idx} (${branch.name}) has ${branch.tables?.length || 0} tables:`, branch.tables);
+        });
+      }
+      return data;
     },
     enabled: !!slug,
   });
@@ -184,7 +193,7 @@ export default function OrganizationPage() {
                   </div>
                   
                   {/* Tables with QR Codes */}
-                  {branch.tables && branch.tables.length > 0 && (
+                  {branch.tables && branch.tables.length > 0 ? (
                     <div className="mt-4 pt-4 border-t border-slate-200">
                       <h4 className="text-sm sm:text-base font-semibold text-slate-900 mb-3">Tables & QR Codes</h4>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
@@ -203,6 +212,18 @@ export default function OrganizationPage() {
                                   className="w-full aspect-square object-contain rounded-lg border-2 border-slate-200 hover:border-slate-900 transition-colors mb-1"
                                 />
                               </a>
+                            ) : table.qr_code ? (
+                              <a
+                                href={table.qr_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block w-full aspect-square bg-slate-100 rounded-lg border-2 border-slate-200 hover:border-slate-900 flex flex-col items-center justify-center mb-1 transition-colors"
+                              >
+                                <svg className="w-8 h-8 text-slate-600 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                                </svg>
+                                <span className="text-xs text-slate-600 font-medium">Click to Order</span>
+                              </a>
                             ) : (
                               <div className="w-full aspect-square bg-slate-100 rounded-lg border-2 border-slate-200 flex items-center justify-center mb-1">
                                 <span className="text-xs text-slate-500">No QR</span>
@@ -213,8 +234,32 @@ export default function OrganizationPage() {
                           </div>
                         ))}
                       </div>
-                      <p className="text-xs text-slate-500 mt-3 text-center">
-                        Scan any QR code to view menu and order
+                      <div className="mt-3 space-y-2">
+                        <p className="text-xs text-slate-500 text-center">
+                          Click any table to view menu and order
+                        </p>
+                        <div className="flex flex-wrap gap-1 justify-center">
+                          {branch.tables.slice(0, 5).map((table) => (
+                            <a
+                              key={table.id}
+                              href={table.qr_url}
+                              className="text-xs px-2 py-1 bg-slate-100 hover:bg-slate-200 rounded text-slate-700 hover:text-slate-900 transition-colors"
+                            >
+                              Table {table.table_number}
+                            </a>
+                          ))}
+                          {branch.tables.length > 5 && (
+                            <span className="text-xs px-2 py-1 text-slate-500">
+                              +{branch.tables.length - 5} more
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="mt-4 pt-4 border-t border-slate-200">
+                      <p className="text-xs text-slate-500 text-center">
+                        No tables available for this branch
                       </p>
                     </div>
                   )}
@@ -224,22 +269,66 @@ export default function OrganizationPage() {
           </div>
         )}
 
-        {/* Call to Action */}
+        {/* Order Section - Scan QR Code or Enter Table Code */}
         <div className="mt-8 sm:mt-12 bg-slate-900 rounded-xl shadow-lg p-6 sm:p-8 text-center text-white">
           <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Ready to Order?</h2>
-          <p className="text-sm sm:text-base text-slate-300 mb-4 sm:mb-6 px-4">
-            Scan the QR code at your table to view our menu and place your order instantly
+          <p className="text-sm sm:text-base text-slate-300 mb-6 sm:mb-8 px-4">
+            Scan the QR code at your table or enter your table code to view our menu and place your order
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
-            <a
-              href="/"
-              className="inline-block px-5 py-2.5 sm:px-6 sm:py-3 bg-white text-slate-900 rounded-lg hover:bg-slate-100 transition-colors font-medium text-sm sm:text-base"
-            >
-              📱 Scan QR Code
-            </a>
+          
+          <div className="max-w-md mx-auto space-y-4">
+            {/* Table Code Input */}
+            <div className="bg-white/10 rounded-lg p-4">
+              <label className="block text-sm font-medium text-white mb-2">
+                Enter Your Table Code
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  id="tableCodeInput"
+                  placeholder="e.g., TBL-XXXXXXXX"
+                  className="flex-1 px-4 py-2.5 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-white"
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      const code = (e.target as HTMLInputElement).value.trim();
+                      if (code) {
+                        window.location.href = `/order/${encodeURIComponent(code)}`;
+                      }
+                    }
+                  }}
+                />
+                <button
+                  onClick={() => {
+                    const code = (document.getElementById('tableCodeInput') as HTMLInputElement)?.value.trim();
+                    if (code) {
+                      window.location.href = `/order/${encodeURIComponent(code)}`;
+                    } else {
+                      alert('Please enter a table code');
+                    }
+                  }}
+                  className="px-5 py-2.5 bg-white text-slate-900 rounded-lg hover:bg-slate-100 transition-colors font-medium whitespace-nowrap"
+                >
+                  Go to Menu
+                </button>
+              </div>
+            </div>
+
+            {/* Scan QR Code Button */}
+            <div>
+              <a
+                href="/"
+                className="inline-block w-full px-5 py-3 bg-white text-slate-900 rounded-lg hover:bg-slate-100 transition-colors font-medium text-base flex items-center justify-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                </svg>
+                📱 Scan QR Code with Camera
+              </a>
+            </div>
+
             {organization.branches.some(b => b.tables && b.tables.length > 0) && (
-              <p className="text-xs sm:text-sm text-slate-400">
-                Or scroll up to view and scan table QR codes
+              <p className="text-xs sm:text-sm text-slate-400 mt-4">
+                💡 Tip: Scroll up to view and scan table QR codes directly from this page
               </p>
             )}
           </div>

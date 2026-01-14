@@ -15,7 +15,10 @@ class OrganizationController extends Controller
         $tenant = Tenant::where('slug', $slug)
             ->where('is_active', true)
             ->with(['branches' => function ($query) {
-                $query->where('is_active', true);
+                $query->where('is_active', true)
+                    ->with(['tables' => function ($query) {
+                        $query->where('is_active', true);
+                    }]);
             }])
             ->first();
 

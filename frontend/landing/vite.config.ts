@@ -2,8 +2,9 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
+// Use relative base path to support both /landing/ and /organizations/ routes
 export default defineConfig({
-  base: '/landing/',
+  base: './',
   plugins: [react()],
   server: {
     port: 5176,

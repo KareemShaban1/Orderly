@@ -122,6 +122,7 @@ class PublicController extends Controller
                 'id' => $tenant->id,
                 'name' => $tenant->name,
                 'slug' => $tenant->slug,
+                'description' => $tenant->description,
                 'link' => "{$frontendUrl}/organizations/{$tenant->slug}",
                 'logo' => $tenant->logo ? url('storage/' . $tenant->logo) : null,
                 'email' => $tenant->email,

@@ -9,7 +9,11 @@ const queryClient = new QueryClient()
 // Register Service Worker for PWA
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/landing/sw.js')
+    // Register service worker with correct path based on current location
+    const swPath = window.location.pathname.startsWith('/organizations/') 
+      ? './sw.js' 
+      : '/landing/sw.js';
+    navigator.serviceWorker.register(swPath)
       .then((registration) => {
         console.log('SW registered: ', registration);
       })
