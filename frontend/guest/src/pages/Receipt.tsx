@@ -100,8 +100,8 @@ function Receipt() {
                 <tr key={item.id}>
                   <td>{item.item_name}</td>
                   <td>{item.quantity}</td>
-                  <td>EGP {item.unit_price.toFixed(2)}</td>
-                  <td>EGP {item.total_price.toFixed(2)}</td>
+                  <td>EGP {Number(item.unit_price || 0).toFixed(2)}</td>
+                  <td>EGP {Number(item.total_price || 0).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
@@ -111,29 +111,29 @@ function Receipt() {
         <div className="receipt-summary">
           <div className="summary-row">
             <span>{language === 'ar' ? 'المجموع الفرعي' : 'Subtotal'}</span>
-            <span>EGP {order.subtotal.toFixed(2)}</span>
+            <span>EGP {Number(order.subtotal || 0).toFixed(2)}</span>
           </div>
           {order.tax_amount > 0 && (
             <div className="summary-row">
               <span>{language === 'ar' ? 'الضريبة' : 'Tax'}</span>
-              <span>EGP {order.tax_amount.toFixed(2)}</span>
+              <span>EGP {Number(order.tax_amount || 0).toFixed(2)}</span>
             </div>
           )}
           {order.service_charge > 0 && (
             <div className="summary-row">
               <span>{language === 'ar' ? 'رسوم الخدمة' : 'Service Charge'}</span>
-              <span>EGP {order.service_charge.toFixed(2)}</span>
+              <span>EGP {Number(order.service_charge || 0).toFixed(2)}</span>
             </div>
           )}
           {order.discount > 0 && (
             <div className="summary-row discount">
               <span>{language === 'ar' ? 'الخصم' : 'Discount'}</span>
-              <span>-EGP {order.discount.toFixed(2)}</span>
+              <span>-EGP {Number(order.discount || 0).toFixed(2)}</span>
             </div>
           )}
           <div className="summary-row total">
             <span>{language === 'ar' ? 'المجموع الكلي' : 'Total'}</span>
-            <span>EGP {order.total.toFixed(2)}</span>
+            <span>EGP {Number(order.total || 0).toFixed(2)}</span>
           </div>
         </div>
 
@@ -143,7 +143,7 @@ function Receipt() {
             {order.payments.map((payment, index) => (
               <div key={index} className="payment-row">
                 <span>{payment.payment_method}</span>
-                <span>EGP {payment.amount.toFixed(2)}</span>
+                <span>EGP {Number(payment.amount || 0).toFixed(2)}</span>
               </div>
             ))}
           </div>

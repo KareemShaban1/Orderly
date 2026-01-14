@@ -205,7 +205,7 @@ function OrderStatus() {
             </span>
             <span className="text-2xl sm:text-3xl font-bold text-emerald-600 flex items-center gap-1">
               <span className="text-sm sm:text-base">EGP</span>
-              {order.total.toFixed(2)}
+              {Number(order.total || 0).toFixed(2)}
             </span>
           </div>
           <div className={`mt-2 sm:mt-3 p-2 sm:p-2.5 rounded-lg text-xs sm:text-sm font-medium flex items-center gap-2 ${
