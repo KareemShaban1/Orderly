@@ -10,6 +10,7 @@ import Settings from './pages/Settings';
 import Analytics from './pages/Analytics';
 import Organizations from './pages/SuperAdmin/Organizations';
 import Locations from './pages/SuperAdmin/Locations';
+import Games from './pages/SuperAdmin/Games';
 import Pos from './pages/Pos';
 import CashierScreen from './pages/CashierScreen';
 import Layout from './components/Layout';
@@ -67,6 +68,7 @@ function AppRoutes() {
         <Route path="pos" element={<Pos />} />
         <Route path="super-admin/organizations" element={<Organizations />} />
         <Route path="super-admin/locations" element={<Locations />} />
+        <Route path="super-admin/games" element={<Games />} />
       </Route>
     </Routes>
   );

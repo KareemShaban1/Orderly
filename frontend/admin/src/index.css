@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes fall {
+  from { top: 0; }
+  to { top: 100%; }
+}
+
+.animate-fall {
+  animation: fall 4s linear forwards;
+}
+
 @layer base {
   * {
     @apply transition-colors duration-150;

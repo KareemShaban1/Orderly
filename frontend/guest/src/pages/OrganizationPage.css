@@ -1,2 +1,45 @@
-/* OrganizationPage.css */
+/* OrganizationPage.css – responsive & safe area */
 
+/* Safe area for notched devices (e.g. iPhone) – adds to Tailwind padding */
+.org-page-header-inner {
+  padding-left: calc(0.75rem + env(safe-area-inset-left, 0px));
+  padding-right: calc(0.75rem + env(safe-area-inset-right, 0px));
+}
+
+.org-page-main {
+  padding-left: calc(0.75rem + env(safe-area-inset-left, 0px));
+  padding-right: calc(0.75rem + env(safe-area-inset-right, 0px));
+}
+
+@media (min-width: 640px) {
+  .org-page-header-inner {
+    padding-left: calc(1rem + env(safe-area-inset-left, 0px));
+    padding-right: calc(1rem + env(safe-area-inset-right, 0px));
+  }
+  .org-page-main {
+    padding-left: calc(1rem + env(safe-area-inset-left, 0px));
+    padding-right: calc(1rem + env(safe-area-inset-right, 0px));
+  }
+}
+
+@media (min-width: 1024px) {
+  .org-page-header-inner {
+    padding-left: calc(1.5rem + env(safe-area-inset-left, 0px));
+    padding-right: calc(1.5rem + env(safe-area-inset-right, 0px));
+  }
+  .org-page-main {
+    padding-left: calc(1.5rem + env(safe-area-inset-left, 0px));
+    padding-right: calc(1.5rem + env(safe-area-inset-right, 0px));
+  }
+}
+
+/* Prevent zoom on input focus on iOS when font-size < 16px */
+.org-page-main input[type="text"] {
+  font-size: 16px;
+}
+
+@media (min-width: 640px) {
+  .org-page-main input[type="text"] {
+    font-size: inherit;
+  }
+}

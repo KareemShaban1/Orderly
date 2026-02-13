@@ -30,6 +30,7 @@
     "settings": "الإعدادات",
     "organizations": "المنظمات",
     "locations": "المواقع",
+    "games": "الألعاب",
     "logout": "تسجيل الخروج"
   },
   "auth": {

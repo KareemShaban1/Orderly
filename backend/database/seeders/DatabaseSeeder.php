@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
         // Seed demo tenant with data
         $this->call([
             TenantSeeder::class,
+            GameSeeder::class,
         ]);
     }
 }

@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\AnalyticsController;
 use App\Http\Controllers\Api\PublicController;
 use App\Http\Controllers\Api\SuperAdmin\OrganizationController;
 use App\Http\Controllers\Api\SuperAdmin\LocationController;
+use App\Http\Controllers\Api\SuperAdmin\GameController;
 use App\Http\Controllers\Api\Admin\PosController;
 
 /*
@@ -29,6 +30,7 @@ use App\Http\Controllers\Api\Admin\PosController;
 // Public routes
 Route::get('/organizations', [PublicController::class, 'getOrganizations']);
 Route::get('/organizations/{slug}', [PublicController::class, 'getOrganizationBySlug']);
+Route::get('/organizations/{slug}/menu', [PublicController::class, 'getOrganizationMenu']);
 Route::get('/governorates', [PublicController::class, 'getGovernorates']);
 Route::get('/cities', [PublicController::class, 'getCities']);
 Route::get('/areas', [PublicController::class, 'getAreas']);
@@ -120,14 +122,25 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::prefix('locations')->group(function () {
             Route::get('/governorates', [LocationController::class, 'getGovernorates']);
             Route::post('/governorates', [LocationController::class, 'addGovernorate']);
+            Route::put('/governorates/{id}', [LocationController::class, 'updateGovernorate']);
             Route::delete('/governorates/{id}', [LocationController::class, 'deleteGovernorate']);
             Route::get('/cities', [LocationController::class, 'getCities']);
             Route::post('/cities', [LocationController::class, 'addCity']);
+            Route::put('/cities/{id}', [LocationController::class, 'updateCity']);
             Route::delete('/cities/{id}', [LocationController::class, 'deleteCity']);
             Route::get('/areas', [LocationController::class, 'getAreas']);
             Route::post('/areas', [LocationController::class, 'addArea']);
+            Route::put('/areas/{id}', [LocationController::class, 'updateArea']);
             Route::delete('/areas/{id}', [LocationController::class, 'deleteArea']);
             Route::get('/statistics', [LocationController::class, 'statistics']);
+        });
+
+        // Games management (assign to organizations)
+        Route::prefix('games')->group(function () {
+            Route::get('/', [GameController::class, 'index']);
+            Route::get('/assignments', [GameController::class, 'assignments']);
+            Route::get('/organizations', [GameController::class, 'organizations']);
+            Route::post('/assign', [GameController::class, 'assign']);
         });
     });
 });

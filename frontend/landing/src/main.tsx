@@ -9,11 +9,10 @@ const queryClient = new QueryClient()
 // Register Service Worker for PWA
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    // Register service worker with correct path based on current location
-    const swPath = window.location.pathname.startsWith('/organizations/') 
-      ? './sw.js' 
-      : '/landing/sw.js';
-    navigator.serviceWorker.register(swPath)
+    // Use relative path so it works for both / and /organizations/ routes in dev & prod
+    const swPath = './sw.js';
+    navigator.serviceWorker
+      .register(swPath)
       .then((registration) => {
         console.log('SW registered: ', registration);
       })

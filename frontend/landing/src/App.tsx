@@ -11,6 +11,12 @@ function App() {
   // Otherwise use /landing
   const getBasename = () => {
     if (typeof window !== 'undefined') {
+      // In development, run without a basename so
+      // http://localhost:5176/ works directly.
+      if (import.meta.env.DEV) {
+        return '';
+      }
+
       const pathname = window.location.pathname;
       return pathname.startsWith('/organizations/') ? '' : '/landing';
     }

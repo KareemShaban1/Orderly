@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:admin\" \"npm run dev:kitchen\"",
-    "dev:frontend": "cd frontend && npm run dev",
-    "dev:admin": "cd admin && npm run dev",
-    "dev:kitchen": "cd kitchen && npm run dev",
-    "install:all": "npm install && cd frontend && npm install && cd ../admin && npm install && cd ../kitchen && npm install",
-    "build:all": "cd frontend && npm run build && cd ../admin && npm run build && cd ../kitchen && npm run build"
+    "dev": "cd frontend && npm run dev:all",
+    "dev:frontend": "cd frontend && npm run dev:guest",
+    "dev:admin": "cd frontend && npm run dev:admin",
+    "dev:kitchen": "cd frontend && npm run dev:kitchen",
+    "install:all": "npm install && cd frontend && npm install && cd admin && npm install && cd kitchen && npm install",
+    "build:all": "cd frontend && npm run build:all"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

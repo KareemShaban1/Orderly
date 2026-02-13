@@ -60,7 +60,8 @@ apiClient.interceptors.response.use(
       localStorage.removeItem('user');
       // Only redirect if not already on login page
       if (!window.location.pathname.includes('/login')) {
-        window.location.href = '/login';
+        // Admin app is served under /admin, so make sure we redirect there
+        window.location.href = '/admin/login';
       }
     }
     return Promise.reject(error);

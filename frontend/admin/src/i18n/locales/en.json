@@ -30,6 +30,7 @@
     "settings": "Settings",
     "organizations": "Organizations",
     "locations": "Locations",
+    "games": "Games",
     "logout": "Logout"
   },
   "auth": {

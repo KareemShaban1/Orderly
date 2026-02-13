@@ -119,7 +119,7 @@ export default function HomePage() {
                 <>
                   <span className="text-xs sm:text-sm text-slate-600 hidden sm:inline">Welcome, {user?.name}</span>
                   <a
-                    href="/admin"
+                    href={import.meta.env.DEV ? 'http://localhost:5174/admin' : '/admin'}
                     className="px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors text-xs sm:text-sm font-medium"
                   >
                     <span className="hidden sm:inline">Admin Dashboard</span>

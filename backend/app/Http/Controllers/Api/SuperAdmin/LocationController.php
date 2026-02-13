@@ -100,6 +100,44 @@ class LocationController extends Controller
     }
 
     /**
+     * Update a governorate
+     */
+    public function updateGovernorate(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $location = Location::where('type', 'governorate')->findOrFail($id);
+        $name = trim($validated['name']);
+
+        if ($location->name !== $name) {
+            $exists = Location::where('type', 'governorate')
+                ->where('id', '!=', $id)
+                ->where('name', $name)
+                ->exists();
+
+            if ($exists) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Governorate already exists',
+                ], 422);
+            }
+
+            $location->update([
+                'name' => $name,
+                'governorate_name' => $name,
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Governorate updated successfully',
+            'data' => $location->fresh(),
+        ]);
+    }
+
+    /**
      * Get cities by governorate (from locations table and branches)
      */
     public function getCities(Request $request)
@@ -251,6 +289,45 @@ class LocationController extends Controller
             'message' => 'City added successfully',
             'data' => $location->name,
         ], 201);
+    }
+
+    /**
+     * Update a city
+     */
+    public function updateCity(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $location = Location::where('type', 'city')->findOrFail($id);
+        $name = trim($validated['name']);
+
+        if ($location->name !== $name) {
+            $exists = Location::where('type', 'city')
+                ->where('parent_id', $location->parent_id)
+                ->where('id', '!=', $id)
+                ->where('name', $name)
+                ->exists();
+
+            if ($exists) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'City already exists in this governorate',
+                ], 422);
+            }
+
+            $location->update([
+                'name' => $name,
+                'city_name' => $name,
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'City updated successfully',
+            'data' => $location->fresh(),
+        ]);
     }
 
     /**
@@ -432,6 +509,44 @@ class LocationController extends Controller
             'message' => 'Area added successfully',
             'data' => $location->name,
         ], 201);
+    }
+
+    /**
+     * Update an area
+     */
+    public function updateArea(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $location = Location::where('type', 'area')->findOrFail($id);
+        $name = trim($validated['name']);
+
+        if ($location->name !== $name) {
+            $exists = Location::where('type', 'area')
+                ->where('parent_id', $location->parent_id)
+                ->where('id', '!=', $id)
+                ->where('name', $name)
+                ->exists();
+
+            if ($exists) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Area already exists in this city',
+                ], 422);
+            }
+
+            $location->update([
+                'name' => $name,
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Area updated successfully',
+            'data' => $location->fresh(),
+        ]);
     }
 
     /**
