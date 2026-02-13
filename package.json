@@ -8,24 +8,11 @@
     "dev:admin": "cd frontend && npm run dev:admin",
     "dev:kitchen": "cd frontend && npm run dev:kitchen",
     "install:all": "npm install && cd frontend && npm install && cd admin && npm install && cd kitchen && npm install",
-    "build:all": "cd frontend && npm run build:all"
+    "build:all": "cd frontend && npm run build:all",
+    "build:frontend": "cd frontend && npm run install:all && npm run build:all",
+    "build:frontend:server": "./scripts/build-all-frontend.sh"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

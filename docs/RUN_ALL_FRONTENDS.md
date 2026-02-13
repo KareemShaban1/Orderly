@@ -85,14 +85,35 @@ Each frontend runs on a different port to avoid conflicts:
 
 ## Building for Production
 
-To build all frontends for production:
+### From repo root (recommended on server)
+
+From the project root directory:
+
+```bash
+npm run build:frontend
+```
+
+This installs dependencies in all frontend apps and builds them (guest, admin, kitchen, landing).
+
+### From frontend directory
 
 ```bash
 cd frontend
+npm run install:all   # if needed
 npm run build:all
 ```
 
-This will create production builds in each frontend's `dist` directory:
+### Server script (with optional permissions)
+
+From repo root on the server:
+
+```bash
+./scripts/build-all-frontend.sh
+```
+
+Optional: set `RUN_AS_USER=www-data` (or your web server user) to chown the `dist` folders after build.
+
+Production builds are created in each app's `dist` directory:
 - `frontend/guest/dist/`
 - `frontend/admin/dist/`
 - `frontend/kitchen/dist/`

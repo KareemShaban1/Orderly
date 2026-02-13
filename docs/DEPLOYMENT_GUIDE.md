@@ -445,12 +445,14 @@ const envUrl = import.meta.env.VITE_API_URL || 'https://api.yourdomain.com';
 const envUrl = import.meta.env.VITE_API_URL || 'https://api.yourdomain.com';
 ```
 
-Then rebuild all frontend apps:
+Then rebuild all frontend apps (from repo root):
 ```bash
-cd /var/www/qr-order/frontend/guest && npm run build
-cd ../admin && npm run build
-cd ../kitchen && npm run build
-cd ../landing && npm run build
+cd /var/www/qr-order
+npm run build:frontend
+```
+Or use the server script (installs deps, builds all; optional `RUN_AS_USER=www-data` for chown):
+```bash
+./scripts/build-all-frontend.sh
 ```
 
 ## 🛠️ Step 12: Maintenance Commands
@@ -477,12 +479,9 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-# Frontend
-cd ../frontend
-cd guest && npm install && npm run build
-cd ../admin && npm install && npm run build
-cd ../kitchen && npm install && npm run build
-cd ../landing && npm install && npm run build
+# Frontend (build all apps from repo root)
+cd /var/www/qr-order
+npm run build:frontend
 
 # Restart services
 sudo systemctl restart qr-order-queue
