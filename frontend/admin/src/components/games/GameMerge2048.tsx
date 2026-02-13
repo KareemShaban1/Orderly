@@ -6,6 +6,7 @@ const GRID = 4;
 interface Props {
   config: Record<string, unknown>;
   onComplete: (score: number) => void;
+  onBack?: () => void;
 }
 
 function getConfig(config: Record<string, unknown>, level: number | null): Record<string, unknown> {

@@ -40,7 +40,7 @@ export default function GameSimonSays({ config, onComplete, onBack }: Props) {
           return;
         }
         setHighlight(next[i]);
-        const t = setTimeout(() => {
+        setTimeout(() => {
           setHighlight(null);
           i += 1;
           setTimeout(show, 220);

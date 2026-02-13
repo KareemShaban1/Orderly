@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 function randomOp(): { a: number; b: number; op: string; result: number } {
   const op = ['+', '-', '*'][Math.floor(Math.random() * 3)];

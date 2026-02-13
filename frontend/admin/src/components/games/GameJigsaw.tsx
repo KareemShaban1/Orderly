@@ -8,7 +8,7 @@ interface Props {
   onComplete: (score: number) => void;
 }
 
-export default function GameJigsaw({ config, onComplete }: Props) {
+export default function GameJigsaw({ config: _config, onComplete }: Props) {
   const [order, setOrder] = useState(() => Array(PIECES).fill(0).map((_, i) => i).sort(() => Math.random() - 0.5));
   const [moves, setMoves] = useState(0);
 

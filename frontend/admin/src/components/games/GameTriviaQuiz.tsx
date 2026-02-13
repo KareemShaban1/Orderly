@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const QUESTIONS = [
   { q: 'What country is sushi from?', options: ['China', 'Japan', 'Korea', 'Thailand'], correct: 1 },

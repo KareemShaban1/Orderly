@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 
 const ITEMS = ['🍔', '🍟', '🥤', '🍕', '🥗', '🍰', '☕', '🌮'];
-const ORDERS_COUNT = 10;
 
 interface Props {
   config: Record<string, unknown>;

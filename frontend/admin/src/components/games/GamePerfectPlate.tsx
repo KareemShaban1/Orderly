@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface Props {
   config: Record<string, unknown>;
@@ -11,7 +11,7 @@ export default function GamePerfectPlate({ config, onComplete }: Props) {
   const [score, setScore] = useState(0);
   const [zone, setZone] = useState(false);
   const [show, setShow] = useState(false);
-  const timerRef = useState<ReturnType<typeof setTimeout>>(0)[0];
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(0);
 
   useEffect(() => {
     setShow(false);
@@ -19,7 +19,7 @@ export default function GamePerfectPlate({ config, onComplete }: Props) {
       setShow(true);
       setZone(true);
       const good = 400 + Math.random() * 400;
-      timerRef = setTimeout(() => setZone(false), good);
+      timerRef.current = setTimeout(() => setZone(false), good);
     }, 800 + Math.random() * 500);
     return () => clearTimeout(t);
   }, [index]);

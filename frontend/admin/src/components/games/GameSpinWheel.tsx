@@ -7,7 +7,7 @@ interface Props {
   onComplete: (score: number) => void;
 }
 
-export default function GameSpinWheel({ config, onComplete }: Props) {
+export default function GameSpinWheel({ config: _config, onComplete }: Props) {
   const [spinning, setSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [result, setResult] = useState<string | null>(null);
@@ -41,7 +41,7 @@ export default function GameSpinWheel({ config, onComplete }: Props) {
           transition: spinning ? 'transform 4.5s cubic-bezier(0.2, 0.8, 0.2, 1)' : 'none',
         }}
       >
-        {SEGMENTS.map((label, i) => (
+        {SEGMENTS.map((_label, i) => (
           <div
             key={i}
             className="absolute w-full h-full"

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const PRIZES = ['10% off', 'Free drink', '5% off', 'Try again', '15% off', 'Free side'];
 
@@ -7,15 +7,13 @@ interface Props {
   onComplete: (score: number) => void;
 }
 
-export default function GameScratchCard({ config, onComplete }: Props) {
-  const [scratching, setScratching] = useState(false);
-  const [revealed, setRevealed] = useState(0);
+export default function GameScratchCard({ config: _config, onComplete }: Props) {
+  const [, setRevealed] = useState(0);
   const [pattern, setPattern] = useState<number[]>([]);
   const [showPattern, setShowPattern] = useState(true);
   const [phase, setPhase] = useState<'memorize' | 'tap' | 'done'>('memorize');
   const [tapIndex, setTapIndex] = useState(0);
   const [prize] = useState(() => PRIZES[Math.floor(Math.random() * PRIZES.length)]);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     if (phase === 'memorize') {
