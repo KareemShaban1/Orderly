@@ -24,7 +24,7 @@ export default function GamePlayer({ game, onClose }: GamePlayerProps) {
   const config = game.config || {};
 
   const renderGame = () => {
-    const complete = (score: number) => {
+    const complete = (_score: number) => {
       onClose();
     };
     switch (game.type) {
